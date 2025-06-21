@@ -1,0 +1,29 @@
+name: CI - Construir e Publicar Imagem Docker
+
+# Este workflow roda toda vez que houver um push na branch 'main'
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Baixa o código do seu repositório
+      - name: Checkout do Repositório
+        uses: actions/checkout@v4
+
+      # 2. Faz o login no Docker Hub
+      - name: Login no Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # 3. Constrói e envia a imagem Docker
+      - name: Build e Push da Imagem
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/calculadora-ci:latest
