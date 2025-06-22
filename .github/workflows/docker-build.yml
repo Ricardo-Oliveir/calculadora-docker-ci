@@ -20,7 +20,7 @@ jobs:
 
       # PASSO 3: Instalar as dependências do projeto
       - name: Instalar Dependências
-        run: npm install
+        run: npm ci
 
       # PASSO 4: Rodar os testes
       - name: Rodar Testes com Jest
