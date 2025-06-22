@@ -24,7 +24,7 @@ jobs:
 
       # PASSO 4: Rodar os testes
       - name: Rodar Testes com Jest
-        run: npm test
+        run: npx test
 
       # PASSO 5: Fazer o login no Docker Hub (só acontece se os testes passarem)
       - name: Login no Docker Hub
