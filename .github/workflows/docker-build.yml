@@ -1,4 +1,4 @@
-name: CI - Construir e Publicar Imagem Docker
+name: CI - Testar, Construir e Publicar Imagem Docker
 
 on:
   push:
@@ -11,30 +11,26 @@ jobs:
       - name: Checkout do Repositório
         uses: actions/checkout@v4
 
-      # =======================================================
-      # PASSOS DE TESTE TEMPORARIAMENTE DESATIVADOS
-      # O workflow irá pular esta seção.
-      # =======================================================
-      # - name: Configurar Node.js
-      #   uses: actions/setup-node@v4
-      #   with:
-      #     node-version: '18'
-      #
-      # - name: Instalar Dependências com 'npm ci'
-      #   run: npm ci
-      #   working-directory: ./Calculadora
-      #
-      # - name: Rodar Testes com 'npm test'
-      #   run: npm test
-      #   working-directory: ./Calculadora
-      # =======================================================
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
 
+      # Como package.json está na raiz, rodamos os comandos direto
+      - name: Instalar Dependências com 'npm ci'
+        run: npm ci
+
+      - name: Rodar Testes com 'npm test'
+        run: npm test
+
+      # O login continua igual
       - name: Login no Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      # O build continua igual, pois Dockerfile está na raiz
       - name: Build e Push da Imagem
         uses: docker/build-push-action@v5
         with:
