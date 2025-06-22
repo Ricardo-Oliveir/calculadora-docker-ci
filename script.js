@@ -59,3 +59,86 @@ if (typeof module !== 'undefined' && module.exports) {
         determinarSituacao
     };
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const display = document.getElementById('display');
+    const botoes = document.querySelectorAll('.botoes button');
+    let valorAtual = '';
+    let operador = '';
+    let valorAnterior = '';
+    let resultadoMostrado = false;
+
+    function atualizarDisplay(valor) {
+        display.value = valor;
+    }
+
+    botoes.forEach(botao => {
+        botao.addEventListener('click', function() {
+            const valor = this.textContent;
+
+            if (valor === 'C') {
+                valorAtual = '';
+                operador = '';
+                valorAnterior = '';
+                atualizarDisplay('');
+                resultadoMostrado = false;
+                return;
+            }
+
+            if (valor === '=') {
+                if (valorAnterior && operador && valorAtual) {
+                    let resultado;
+                    try {
+                        resultado = eval(valorAnterior + operador + valorAtual);
+                    } catch {
+                        resultado = 'Erro';
+                    }
+                    atualizarDisplay(resultado);
+                    valorAtual = resultado.toString();
+                    operador = '';
+                    valorAnterior = '';
+                    resultadoMostrado = true;
+                }
+                return;
+            }
+
+            if (['+', '-', '*', '/'].includes(valor)) {
+                if (valorAtual) {
+                    if (valorAnterior && operador) {
+                        // Se já tem operação pendente, resolve antes
+                        let resultado;
+                        try {
+                            resultado = eval(valorAnterior + operador + valorAtual);
+                        } catch {
+                            resultado = 'Erro';
+                        }
+                        valorAnterior = resultado.toString();
+                        atualizarDisplay(valorAnterior + valor);
+                    } else {
+                        valorAnterior = valorAtual;
+                        atualizarDisplay(valorAtual + valor);
+                    }
+                    operador = valor;
+                    valorAtual = '';
+                } else if (valorAnterior && operador) {
+                    operador = valor;
+                    atualizarDisplay(valorAnterior + operador);
+                }
+                return;
+            }
+
+            // Se resultado foi mostrado, iniciar novo cálculo
+            if (resultadoMostrado) {
+                valorAtual = '';
+                operador = '';
+                valorAnterior = '';
+                resultadoMostrado = false;
+            }
+
+            // Adiciona número ou ponto
+            if (valor === '.' && valorAtual.includes('.')) return;
+            valorAtual += valor;
+            atualizarDisplay((valorAnterior ? valorAnterior + operador : '') + valorAtual);
+        });
+    });
+});
