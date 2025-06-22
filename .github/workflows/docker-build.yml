@@ -8,26 +8,32 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # PASSO 1: Baixar o código
       - name: Checkout do Repositório
         uses: actions/checkout@v4
 
-      
-      - name: Configurar Node.js e Rodar Testes
+      # PASSO 2: Instalar o Node.js e o NPM
+      - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18' 
+          node-version: '18'
+
+      # PASSO 3: Instalar as dependências do projeto
       - name: Instalar Dependências
         run: npm install
+
+      # PASSO 4: Rodar os testes
       - name: Rodar Testes com Jest
         run: npm test
-    
 
+      # PASSO 5: Fazer o login no Docker Hub (só acontece se os testes passarem)
       - name: Login no Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      # PASSO 6: Construir e enviar a imagem
       - name: Build e Push da Imagem
         uses: docker/build-push-action@v5
         with:
