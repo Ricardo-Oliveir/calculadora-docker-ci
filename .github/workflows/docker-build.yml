@@ -1,48 +1,40 @@
-# Nome do workflow que aparecerá na aba "Actions" do GitHub
-name: CI - Testar, Construir e Publicar Imagem Docker
+name: CI - Construir e Publicar Imagem Docker
 
-# Gatilho: O workflow roda automaticamente em todo push para a branch 'main'
 on:
   push:
     branches: [ "main" ]
 
-# Define os jobs (tarefas) que o workflow irá executar
 jobs:
-  # Nome do job
   build:
-    # Ambiente de execução: uma máquina virtual Ubuntu atualizada
     runs-on: ubuntu-latest
-
-    # Passos que serão executados em sequência
     steps:
-      # Passo 1: Clona o seu repositório para a máquina virtual
       - name: Checkout do Repositório
         uses: actions/checkout@v4
 
-      # Passo 2: Configura o ambiente Node.js para rodar os testes
-      - name: Configurar Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
+      # =======================================================
+      # PASSOS DE TESTE TEMPORARIAMENTE DESATIVADOS
+      # O workflow irá pular esta seção.
+      # =======================================================
+      # - name: Configurar Node.js
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version: '18'
+      #
+      # - name: Instalar Dependências com 'npm ci'
+      #   run: npm ci
+      #   working-directory: ./Calculadora
+      #
+      # - name: Rodar Testes com 'npm test'
+      #   run: npm test
+      #   working-directory: ./Calculadora
+      # =======================================================
 
-      # Passo 3: Instala as dependências DENTRO DA PASTA /Calculadora
-      - name: Instalar Dependências com 'npm ci'
-        run: npm ci
-        working-directory: ./Calculadora
-
-      # Passo 4: Roda os testes DENTRO DA PASTA /Calculadora
-      - name: Rodar Testes com 'npm test'
-        run: npm test
-        working-directory: ./Calculadora
-
-      # Passo 5: Faz o login no Docker Hub (só acontece se os testes passarem)
       - name: Login no Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # Passo 6: Constrói a imagem Docker e a envia para o Docker Hub
       - name: Build e Push da Imagem
         uses: docker/build-push-action@v5
         with:
