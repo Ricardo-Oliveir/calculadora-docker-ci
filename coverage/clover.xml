@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1750610516304" clover="3.2.0">
-  <project timestamp="1750610516304" name="All files">
+<coverage generated="1750612446343" clover="3.2.0">
+  <project timestamp="1750612446344" name="All files">
     <metrics statements="80" coveredstatements="11" conditionals="50" coveredconditionals="10" methods="9" coveredmethods="3" elements="139" coveredelements="24" complexity="0" loc="80" ncloc="80" packages="1" files="1" classes="1"/>
     <file name="script.js" path="C:\Users\Ricardo\OneDrive - Fatec Centro Paula Souza\Desktop\calculadora-docker-ci\script.js">
       <metrics statements="80" coveredstatements="11" conditionals="50" coveredconditionals="10" methods="9" coveredmethods="3"/>
